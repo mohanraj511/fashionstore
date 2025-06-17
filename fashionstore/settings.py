@@ -1,4 +1,5 @@
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -9,7 +10,7 @@ SECRET_KEY = 'django-insecure-ad+_o^($c#7k2p#vqe2mo^cg1#25ql%q=%j@2z(ga^paxzocv3
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [os.getenv("RENDER_EXTERNAL_HOSTNAME"),'fashionstore-2.onrender.com']
 
 # Application definition
 INSTALLED_APPS = [
