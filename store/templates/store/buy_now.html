@@ -1,0 +1,42 @@
+{% extends 'store/base.html' %}
+{% block title %}Buy Now - {{ product.name }}{% endblock %}
+
+{% block content %}
+<div style="max-width: 700px; margin: 40px auto; padding: 30px; background: #fff; border-radius: 12px; box-shadow: 0 0 15px rgba(0,0,0,0.1);">
+
+  <h2 style="text-align: center; margin-bottom: 20px; color: #333;">Instant Purchase</h2>
+
+  <div style="display: flex; flex-direction: column; align-items: center;">
+    {% if product.image %}
+      <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width: 200px; border-radius: 10px; margin-bottom: 15px;">
+    {% endif %}
+
+    <h3 style="margin: 10px 0;">{{ product.name }}</h3>
+    <p><strong>Price:</strong> ₹{{ product.price }}</p>
+    <p><strong>Category:</strong> {{ product.category }}</p>
+
+    <form method="POST" action="{% url 'place_order_page' product.slug %}" style="margin-top: 20px; width: 100%;">
+      {% csrf_token %}
+
+      <label for="address" style="display: block; margin-bottom: 5px;">Delivery Address:</label>
+      <textarea name="address" required placeholder="Enter your full delivery address" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 6px; margin-bottom: 15px;"></textarea>
+
+      <label for="payment_method" style="display: block; margin-bottom: 5px;">Select Payment Method:</label>
+      <select name="payment_method" required style="width: 100%; padding: 8px; margin-bottom: 20px; border-radius: 6px;">
+        <option value="">-- Choose --</option>
+        <option value="Cash on Delivery">Cash on Delivery</option>
+        <option value="Net Banking">Net Banking</option>
+        <option value="UPI">UPI</option>
+        <option value="Gift Voucher">Gift Voucher</option>
+      </select>
+
+      <button type="submit"
+              style="width: 100%; padding: 12px; background-color: #e91e63; color: white; border: none; border-radius: 8px; font-size: 16px;">
+        Place Order Now
+      </button>
+    </form>
+
+    <a href="{% url 'product_detail' product.slug %}" style="margin-top: 15px; color: #888;">← Back to Product</a>
+  </div>
+</div>
+{% endblock %}

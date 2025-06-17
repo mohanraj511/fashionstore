@@ -1,0 +1,199 @@
+{% extends 'store/base.html' %}
+ {% load static %}
+  {% block content %}
+
+<link rel="stylesheet" href="{% static 'store/css/login.css' %}">
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script><div class="theme-toggle">
+  <label class="switch">
+    <input type="checkbox" id="themeToggle">
+    <span class="slider round"></span>
+  </label>
+</div><div class="account-wrapper">
+  <div class="account-header">
+    <h1>
+      <img src="{% static 'store/images/youraccount.png' %}" alt="Account Icon" class="account-icon">
+      Your Account
+    </h1>
+    <span id="toggleAccount" class="toggle-icon"><i class="fas fa-eye-slash"></i></span>
+  </div>  <div class="account-info">
+    <p><strong>Name:</strong> {{ request.user.username }}</p>
+    <p><strong>Email:</strong> {{ request.user.email }}</p>
+    <p><strong>Age:</strong> {{ profile.age }}</p>
+    <p><strong>Gender:</strong> {{ profile.gender }}</p>
+    <p><strong>Address:</strong> {{ profile.address }}</p>
+    <p><strong>Mobile:</strong> {{ profile.mobile_number }}</p><a href="{% url 'logout' %}" class="btn logout" id="logoutBtn">Logout</a>
+<a href="{% url 'edit_account' %}" class="btn edit">Edit Profile</a>
+<a href="#" class="btn order">📦 My Orders</a>
+<a href="{% url 'cart' %}" class="btn cart">🛒 View My Cart</a>
+
+  </div>  <div class="account-sections">
+    <a href="#" class="section-link">❓ Help Center</a>
+    <a href="#" class="section-link">📞 Contact Support</a>
+  </div>
+</div><script src="{% static 'store/js/account.js' %}"></script>
+<style>
+  /* Dark and Light Theme Support */
+:root {
+  --primary-bg: #f0f0f0;
+  --primary-text: #333;
+  --card-bg: #ffffff;
+  --accent-color: #4e73df;
+  --button-bg: #4e73df;
+  --button-hover: #375abd;
+}
+
+.dark-mode {
+  --primary-bg: #2d2db8;
+  --primary-text: #f9f9f9;
+  --card-bg: #2b2b3d;
+  --accent-color: #8ab4f8;
+  --button-bg: #3c3c60;
+  --button-hover: #5c5c9f;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: var(--primary-bg);
+  color: var(--primary-text);
+  transition: all 0.3s ease;
+}
+
+.account-wrapper {
+  max-width: 400px;
+  margin: 60px auto;
+  background-color: var(--card-bg);
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  position: relative;
+  transition: 0.2s;
+}
+
+.account-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px dashed var(--accent-color);
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+}
+
+.account-icon {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+.account-header h1 {
+  font-size: 1.8rem;
+  display: flex;
+  align-items: center;
+}
+
+.toggle-icon {
+  font-size: 1.3rem;
+  cursor: pointer;
+  color: var(--accent-color);
+}
+
+.account-info p {
+  margin: 12px 0;
+  font-size: 1rem;
+  font-family: Arial;
+  color: #1a1818;
+  border-left: 4px solid var(--accent-color);
+  padding-left: 10px;
+}
+
+.account-info .btn {
+  display: inline-block;
+  background-color: var(--button-bg);
+  color: #fff;
+  padding: 10px 0px;
+  margin: 5px 4px 0 0;
+  border-radius: 8px;
+  text-decoration: skyblue;
+  transition: 0.3s ease;
+  font-weight: 600;
+  box-shadow: 0 0 10px var(--button-bg);
+}
+
+.account-info .btn:hover {
+  background-color: var(--button-hover);
+  box-shadow: 0 0 15px var(--button-hover);
+}
+
+.account-sections {
+  margin-top: 25px;
+  border-top: 2px dotted var(--accent-color);
+  padding-top: 20px;
+}
+
+.section-link {
+  display: block;
+  margin: 10px 0;
+  font-size: 1.05rem;
+  text-decoration: none;
+  color: var(--accent-color);
+  font-weight: bold;
+  transition: 0.2s ease-in-out;
+}
+
+.section-link:hover {
+  color: var(--button-hover);
+  transform: translateX(5px);
+}
+
+/* Theme Switch */
+.theme-toggle {
+  position: absolute;
+  top: 25px;
+  right: 25px;
+  z-index: 999;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 28px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 28px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px; width: 20px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: var(--accent-color);
+}
+
+input:checked + .slider:before {
+  transform: translateX(22px);
+}
+</style>
+{% endblock %}

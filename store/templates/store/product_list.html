@@ -1,0 +1,75 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'store/css/style.css' %}">
+{% endblock %}
+
+{% block content %}
+<div style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 30px;">
+  <img src="{% static 'store/images/logo.png' %}" alt="Site Logo" style="height: 60px; width: auto; transition: transform 0.3s ease;"
+       onmouseover="this.style.transform='rotate(8deg)'"
+       onmouseout="this.style.transform='rotate(0deg)'">
+  <h1 class="animated-text">WELCOME TO FASHION STORE</h1>
+</div>
+
+{% for category, products in categorized_products.items %}
+  <h2 style="margin-top:40px; color:#e49f0cc4; margin-left: 10px;">{{ category|capfirst }}</h2>
+
+  {% if products %}
+    <div class="scroll-container">
+      <div class="scroll-row">
+        {% for product in products %}
+          <div class="card">
+            {% if product.image %}
+              <img src="{{ product.image.url }}" alt="{{ product.name }}">
+            {% else %}
+              <img src="{% static 'images/placeholder.png' %}" alt="No image available">
+            {% endif %}
+
+            {% if product.slug %}
+              <a href="{% url 'product_detail' product.slug %}">
+                <h3>{{ product.name }}</h3>
+              </a>
+            {% else %}
+              <h3>{{ product.name }}</h3>
+            {% endif %}
+
+            <div class="category">{{ product.category }}</div>
+            <p>{{ product.description|truncatewords:15 }}</p>
+            <div class="price">₹{{ product.price }}</div>
+           
+            <!-- Buy Now Button -->
+             {%if product.slug %}
+            <a href="{% url 'buy_now' product.slug %}">
+              <button type="button" class="buy-now-button">Buy Now</button>
+            </a>
+         {% endif %}
+            <!-- Add to Cart Form (only if slug exists) -->
+ {%if product.slug%}
+              <form method="POST" action="{% url 'add_to_cart' product.id %}">
+                {% csrf_token %}
+                <button type="submit" class="buy-now-button" style="background-color:#1565c0; margin-top: 8px;">Add to Cart</button>
+              </form>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% else %}
+    <p style="margin-left: 10px;">No products available yet in this category.</p>
+  {% endif %}
+{% endfor %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll('.card').forEach((card, index) => {
+      setTimeout(() => {
+        card.classList.add('animate');
+      }, index * 100);
+    });
+  });
+</script>
+{% endblock %}

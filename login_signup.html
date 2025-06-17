@@ -1,0 +1,44 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block title %}Login / Signup{% endblock %}
+{% block body_class %}login-page-body{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'store/css/login.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="login-page"></div>
+  <div class="login-container">
+    <!-- 🔄 Theme Toggle Button -->
+    <button class="theme-toggle" onclick="toggleTheme()">🌗 Toggle Theme</button>
+
+    <!-- ✅ Login Form -->
+    <form method="POST" id="login-form" class="login-form active">
+      {% csrf_token %}
+      <h1>Login</h1>
+      <input type="text" name="username" placeholder="Username" required />
+      <input type="password" name="password" placeholder="Password" required />
+      <button type="submit" name="login">Login</button>
+      <p>Don't have an account? <a href="#" id="signup-link">Sign up</a></p>
+    </form>
+
+    <!-- ✅ Signup Form -->
+    <form method="POST" id="signup-form" class="login-form">
+      {% csrf_token %}
+      <h1>Sign Up</h1>
+      <input type="text" name="username" placeholder="Username" required />
+      <input type="email" name="email" placeholder="Email" required />
+      <input type="password" name="password" placeholder="Create Password" required />
+      <p class="strength-msg" id="strengthMsg"></p>
+      <input type="password" name="confirm_password" placeholder="Confirm Password" required />
+      <button type="submit" name="signup">Sign Up</button>
+      <p>Already have an account? <a href="#" id="back-to-login">Back to login</a></p>
+    </form>
+
+  </div>
+</div>
+
+<!-- ✅ Script -->
+<script src="{% static 'store/js/login.js' %}"></script>
+{% endblock %}

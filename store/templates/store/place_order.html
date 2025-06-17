@@ -1,0 +1,48 @@
+{% extends 'store/base.html' %}
+{% block title %}Place Order{% endblock %}
+
+{% block content %}
+<div style="max-width: 700px; margin: 40px auto; padding: 30px; background: #fefefe; border-radius: 12px; box-shadow: 0 0 20px rgba(0,0,0,0.08);">
+
+  <h2 style="text-align: center; color: #333;">Checkout Summary</h2>
+
+  {% if product %}
+    <!-- For Buy Now (Single Product) -->
+    <div style="margin-bottom: 20px; text-align: center;">
+      <img src="{{ product.image.url }}" style="width: 150px; border-radius: 10px;" alt="{{ product.name }}">
+      <p><strong>{{ product.name }}</strong> - ₹{{ product.price }}</p>
+    </div>
+  {% else %}
+    <!-- For Cart Items -->
+    <ul style="list-style: none; padding: 0;">
+      {% for item in cart_items %}
+        <li style="padding: 10px 0; border-bottom: 1px solid #ddd;">
+          <strong>{{ item.product.name }}</strong> × {{ item.quantity }} - ₹{{ item.total_price }}
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  <form method="POST" style="margin-top: 25px;">
+    {% csrf_token %}
+    <label for="address">Shipping Address:</label>
+    <textarea name="address" required placeholder="Enter your delivery address" style="width: 100%; padding: 10px; border-radius: 6px; margin-bottom: 20px;"></textarea>
+
+    <label for="payment_method">Payment Method:</label>
+    <select name="payment_method" required style="width: 100%; padding: 10px; border-radius: 6px; margin-bottom: 25px;">
+      <option value="">-- Choose Payment Method --</option>
+      <option value="Cash on Delivery">Cash on Delivery</option>
+      <option value="Net Banking">Net Banking</option>
+      <option value="UPI">UPI</option>
+      <option value="Gift Voucher">Gift Voucher</option>
+    </select>
+
+    <button type="submit"
+            style="width: 100%; padding: 12px; background: #3f51b5; color: white; font-size: 16px; border: none; border-radius: 8px;">
+      🧾 Confirm Order
+    </button>
+  </form>
+
+  <a href="{% url 'cart' %}" style="display: block; margin-top: 20px; color: #777;">← Back to Cart</a>
+</div>
+{% endblock %}

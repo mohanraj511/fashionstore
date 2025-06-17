@@ -1,0 +1,75 @@
+{% extends 'store/base.html' %}
+{% load static %}
+{% block title %}Your Cart{% endblock %}
+
+{% block content %}
+<div class="cart-container" style="max-width: 700px; margin: 40px auto; padding: 20px; background: #ffffffee; border-radius: 16px; box-shadow: 0 0 20px rgba(0,0,0,0.1); animation: fadeInCart 1s ease;">
+  <h2 style="text-align: center; font-size: 28px; margin-bottom: 20px;">🛒 Your Cart</h2>
+
+  {% if cart_items %}
+    <ul style="list-style: none; padding: 0;">
+      {% for item in cart_items %}
+        <li class="cart-item" style="display: flex; align-items: center; gap: 15px; margin: 15px 0; padding: 10px; border: 1px solid #ddd; border-radius: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); animation: bounceIn 0.3s ease;">
+          <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" style="width: 70px; height: 70px; object-fit: cover; border-radius: 10px;">
+          <div>
+            <strong>{{ item.product.name }}</strong><br>
+            ₹{{ item.product.price }} x {{ item.quantity }} = <span style="color: #28a745;">₹{{ item.total_price|floatformat:2 }}</span>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+
+    <hr style="margin: 20px 0;">
+    <h3 style="text-align: right; color: #333;">Total: <span style="color: #28a745;">₹{{ total }}</span></h3>
+
+    <form method="POST" action="{% url 'checkout' %}" style="text-align: center; margin-top: 30px;">
+      {% csrf_token %}
+      <button type="submit" class="proceed-btn">🛍 Proceed to Pay</button>
+    </form>
+
+  {% else %}
+    <p style="text-align: center; font-size: 18px; color: #888;">Your cart is empty.</p>
+  {% endif %}
+</div>
+
+<!-- Extra Styling -->
+<style>
+body {
+  background: linear-gradient(to right, #f0faff, #e0f7ff);
+}
+@keyframes fadeInCart {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes bounceIn {
+  0% { transform: scale(0.95); opacity: 0; }
+  60% { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(1); }
+}
+.proceed-btn {
+  background: #28a745;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  padding: 12px 28px;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  transition: 0.3s;
+}
+.proceed-btn:hover {
+  background: #218838;
+  transform: scale(1.05);
+}
+</style>
+
+<!-- Optional JS Animation Sound -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const ding = new Audio("{% static 'store/sfx/chime.mp3' %}");
+  setTimeout(() => {
+    ding.play().catch(() => {});
+  }, 300);
+});
+</script>
+{% endblock %}

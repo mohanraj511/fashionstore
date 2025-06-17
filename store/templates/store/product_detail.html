@@ -1,0 +1,32 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block content %}
+  <div style="max-width: 800px; margin: 40px auto; padding: 20px; background: #fff; box-shadow: 0 0 10px rgba(0,0,0,0.1); border-radius: 10px; text-align: center;">
+    
+    <h1 style="margin-bottom: 20px; font-size: 28px; color: #333;">{{ product.name }}</h1>
+
+    {% if product.image %}
+      <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width: 100%; max-width: 400px; height: auto; border-radius: 10px;">
+    {% else %}
+      <img src="{% static 'images/placeholder.png' %}" alt="No image available" style="width: 100%; max-width: 400px; height: auto; border-radius: 10px;">
+    {% endif %}
+
+    <p style="margin-top: 20px; font-size: 18px;"><strong>Category:</strong> {{ product.category|capfirst }}</p>
+    <p style="font-size: 18px;"><strong>Price:</strong> ₹{{ product.price }}</p>
+    <p style="font-size: 16px; color: #666; margin-top: 20px;">{{ product.description }}</p>
+
+    <!-- Buy Now Form -->
+    <form action="{% url 'buy_now' product.id %}" method="get" style="margin-top: 10px;">
+      <button type="submit" style="padding: 10px 20px; background-color: #e91e63; color: white; border: none; border-radius: 5px;">Buy Now</button>
+    </form>
+
+    <!-- Add to Cart Form -->
+    <form method="POST" action="{% url 'add_to_cart' product.id %}" style="margin-top: 10px;">
+      {% csrf_token %}
+      <button type="submit" style="padding: 10px 20px; background-color: #1976d2; color: white; border: none; border-radius: 5px;">Add to Cart</button>
+    </form>
+
+    <a href="{% url 'product_list' %}" style="display: inline-block; margin-top: 30px; padding: 10px 20px; background-color: #111; color: #fff; text-decoration: none; border-radius: 5px;">← Back to Products</a>
+  </div>
+{% endblock %}

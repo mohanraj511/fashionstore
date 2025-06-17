@@ -1,0 +1,198 @@
+/* ✅ Category Container Styles */
+.scroll-container {
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: 10px 0;
+  margin-bottom: 30px;
+  scrollbar-width: thin;
+  scrollbar-color: #888 transparent;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+.scroll-container::-webkit-scrollbar {
+  height: 8px;
+}
+.scroll-container::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+.scroll-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ✅ Row of product cards */
+.scroll-row {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  padding: 0 10px;
+  flex-wrap: nowrap;
+}
+
+/* ✅ Individual product card */
+.card {
+  width: 220px;
+  height: 330px;
+  position: relative;
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 12px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  z-index: 10;
+  border: 2px solid transparent;
+}
+.card img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+.card h3 {
+  font-size: 1.1rem;
+  margin: 10px 0 5px;
+  color: #0d0d0e;
+}
+.card .category {
+  font-size: 0.85rem;
+  color: #110f14;
+  margin-bottom: 6px;
+}
+.card p {
+  font-size: 0.9rem;
+  color: #444;
+  margin-bottom: 10px;
+}
+.card .price {
+  font-weight: bold;
+  color: #e21414;
+  font-size: 1rem;
+}
+
+/* ✅ Hover Effect (merged) */
+.card:hover {
+  transform: scale(1.03);
+  border: 2px solid transparent;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2), 0 0 15px rgba(79, 70, 229, 0.2);
+}
+
+/* ✅ Glowing Border Animation */
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  padding: 2px;
+  background: linear-gradient(90deg, #e63131, #e49f0c, #00c2ff, #e63131);
+  background-size: 300%;
+  animation: glowmove 4s linear infinite;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  z-index: 1;
+  pointer-events: none;
+}
+@keyframes glowmove {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+/* ✅ Animated Gradient Text */
+.animated-text {
+  font-family: 'Courier New', monospace;
+  font-size: 32px;
+  font-weight: bold;
+  background: linear-gradient(90deg, #e63131, #e49f0c, #00c2ff, #e63131);
+  background-size: 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientMove 5s linear infinite;
+}
+@keyframes gradientMove {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+/* ✅ Typography & Sections */
+h1 {
+  font-size: 2rem;
+  text-align: center;
+  margin: 30px 0 20px;
+  color: #111;
+}
+h2 {
+  font-size: 1.4rem;
+  color: #333;
+  margin: 20px 0 10px 10px;
+}
+
+/* ✅ Login Utility */
+.login-form.hidden {
+  display: none;
+}
+.switch-text {
+  margin-top: 15px;
+  font-size: 0.9rem;
+}
+.switch-text a {
+  color: #3f2b96;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+/* ✅ Responsive Tweaks */
+@media screen and (max-width: 768px) {
+  .scroll-row {
+    gap: 16px;
+  }
+  .card {
+    width: 180px;
+    height: 300px;
+  }
+  .card h3 {
+    font-size: 1rem;
+  }
+  .card p {
+    font-size: 0.85rem;
+  }
+  .card .price {
+    font-size: 0.95rem;
+  }
+}
+@media screen and (max-width: 480px) {
+  .card {
+    width: 160px;
+    height: 290px;
+  }
+  .card img {
+    height: 130px;
+  }
+}
+.buy-now-button {
+  background-color: #e91e63;
+  color: white;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 10px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.buy-now-button:hover {
+  background-color: #c2185b;
+}

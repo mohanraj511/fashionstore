@@ -1,0 +1,64 @@
+
+  .edit-profile-container {
+    background: white;
+    padding: 40px 30px;
+    border-radius: 15px;
+    box-shadow: 0 12px 25px rgba(63, 43, 150, 0.3);
+    width: 90%;
+    max-width: 400px;
+    margin: 50px auto;
+    animation: fadeInUp 0.6s ease forwards;
+  }
+
+  .edit-profile-container h2 {
+    text-align: center;
+    color: #3f2b96;
+    margin-bottom: 25px;
+    font-size: 1.8rem;
+  }
+
+  .edit-profile-container label {
+    display: block;
+    margin-top: 15px;
+    font-weight: 600;
+    color: #333;
+  }
+
+  .edit-profile-container input,
+  .edit-profile-container textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+  }
+
+  .edit-profile-container button {
+    margin-top: 25px;
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(45deg, #3f2b96, #a8c0ff);
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+
+  .edit-profile-container button:hover {
+    background: linear-gradient(45deg, #a8c0ff, #3f2b96);
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }

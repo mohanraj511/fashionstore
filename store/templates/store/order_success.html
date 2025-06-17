@@ -1,0 +1,172 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block title %}Order Success{% endblock %}
+
+{% block content %}
+
+<!-- Animation Scene -->
+{% if show_animation %}
+<div id="animation-scene" style="position: relative; width: 100%; height: 400px; background: linear-gradient(to top, #cceeff, #ffffff); overflow: hidden;">
+  <img src="{% static 'store/images/cloud1.png' %}" style="position: absolute; top: 20px; left: 50px; width: 120px; animation: cloudMove 60s linear infinite;">
+  <img src="{% static 'store/images/cloud2.png' %}" style="position: absolute; top: 60px; left: 200px; width: 150px; animation: cloudMove 80s linear infinite;">
+  <img src="{% static 'store/images/road.png' %}" style="position: absolute; bottom: 0; width: 100%; height: 150px; object-fit: cover; z-index: 1;">
+  <img src="{% static 'store/images/store.png' %}" style="position: absolute; bottom: 160px; left: 30px; height: 200px; z-index: 2;">
+  <img src="{% static 'store/images/employee.png' %}" style="position: absolute; bottom: 160px; left: 120px; height: 80px; z-index: 3;">
+  <img src="{% static 'store/images/truck.png' %}" class="truck-animation" style="position: absolute; bottom: 70px; height: 220px; z-index: 4;">
+  <img src="{% static 'store/images/box.png' %}" class="box-bounce" style="position: absolute; bottom: 130px; height: 90px; z-index: 5; left: 70px;">
+  <div id="left-curtain"></div>
+  <div id="right-curtain"></div>
+</div>
+{% endif %}
+
+<!-- Message Section -->
+<div id="success-message" style="text-align: center; margin-top: 30px; opacity: {% if show_animation %}0{% else %}1{% endif %}; transition: opacity 1s ease;">
+  {% if order_already_placed %}
+    <h2 style="color: #dc3545; font-size: 28px;">❗ Order Already Placed</h2>
+    <p style="font-size: 18px;">You have already placed this order.</p>
+  {% else %}
+    <h2 style="color: #28a745; font-size: 28px;">🎉 Order Placed Successfully!</h2>
+    <p style="font-size: 18px;">Your order is being packed and will reach you soon!</p>
+  {% endif %}
+
+  <a href="{% url 'product_list' %}" style="margin-top: 20px; display: inline-block; padding: 10px 24px; background: #28a745; color: white; border-radius: 8px; text-decoration: none; font-weight: bold;">🛍 Continue Shopping</a>
+  <br><br>
+  <a href="{% url 'account' %}" style="color: #007bff; text-decoration: underline;">🔎 View Order in Account</a>
+
+  {% if not show_animation %}
+  <!-- ✅ Tick Animation for Non-Animation Mode -->
+  <div style="display: flex; justify-content: center; margin-top: 20px;">
+    <svg viewBox="0 0 52 52" width="100" height="100" style="stroke: #28a745; stroke-width: 4; fill: none; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 0 8px #28a745);">
+      <circle cx="26" cy="26" r="25" style="stroke-dasharray: 157; stroke-dashoffset: 157; animation: drawCircle 1s ease-out forwards;"></circle>
+      <path d="M14 27 L22 35 L38 18" style="stroke-dasharray: 35; stroke-dashoffset: 35; animation: drawCheck 0.6s 1s ease forwards;"></path>
+    </svg>
+  </div>
+  <audio id="tick-sound" src="{% static 'store/sfx/chime.mp3' %}" preload="auto" muted></audio>
+  {% endif %}
+</div>
+
+<!-- Sounds -->
+<audio id="truck-sound" src="{% static 'store/sfx/truck_pass.mp3' %}" preload="auto" muted></audio>
+<audio id="bells-sound" src="{% static 'store/sfx/bells.mp3' %}" preload="auto" muted></audio>
+
+<!-- Confetti Canvas -->
+<canvas id="confetti-canvas" style="position: fixed; top: 0; left: 0; pointer-events: none; width: 100%; height: 100%; z-index: 20;"></canvas>
+
+<!-- Styles -->
+<style>
+@keyframes driveTruck {
+  0% { left: 140px; }
+  20% { left: 140px; }
+  100% { left: 100%; }
+}
+@keyframes cloudMove {
+  0% { left: -200px; }
+  100% { left: 100%; }
+}
+@keyframes bounce {
+  from { transform: translateY(0px); }
+  to   { transform: translateY(-10px); }
+}
+@keyframes curtainCloseLeft {
+  from { left: -50%; }
+  to { left: 0; }
+}
+@keyframes curtainCloseRight {
+  from { right: -50%; }
+  to { right: 0; }
+}
+.truck-animation {
+  left: 140px;
+  animation: driveTruck 10s ease-in-out forwards;
+}
+.box-bounce {
+  animation: bounce 0.6s ease-in-out infinite alternate;
+}
+#left-curtain, #right-curtain {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  background: #ffffff;
+  z-index: 10;
+}
+#left-curtain {
+  left: -50%;
+  animation: curtainCloseLeft 1s ease forwards;
+  animation-delay: 11s;
+}
+#right-curtain {
+  right: -50%;
+  animation: curtainCloseRight 1s ease forwards;
+  animation-delay: 11s;
+}
+</style>
+
+<!-- Script -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const showAnimation = {{ show_animation|yesno:"true,false" | safe }};
+  const truckSound = document.getElementById('truck-sound');
+  const bellsSound = document.getElementById('bells-sound');
+  const messageBox = document.getElementById('success-message');
+
+  if (showAnimation) {
+    setTimeout(() => {
+      truckSound.muted = false;
+      truckSound.currentTime = 0;
+      truckSound.play().catch(e => console.log('Truck sound error:', e));
+    }, 1000);
+
+    setTimeout(() => {
+      bellsSound.muted = false;
+      bellsSound.currentTime = 0;
+      bellsSound.play().catch(e => console.log('Bells sound error:', e));
+    }, 12000);
+
+    setTimeout(() => {
+      messageBox.style.opacity = 1;
+
+      // 🎯 Fire confetti
+      confetti({
+        particleCount: 180,
+        spread: 90,
+        origin: { y: 0.6 }
+      });
+
+      // 🎯 Reset animation flag in session after it's done
+      fetch("{% url 'reset_animation' %}", {
+        method: "POST",
+        headers: {
+          "X-CSRFToken": "{{ csrf_token }}",
+        },
+      });
+    }, 13000);
+  }
+});
+</script>
+<style>
+    @keyframes drawCircle {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes drawCheck {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+    </style>
+<script>
+    if (!showAnimation) {
+  const tickSound = document.getElementById('tick-sound');
+  if (tickSound) {
+    setTimeout(() => {
+      tickSound.muted = false;
+      tickSound.play().catch(e => console.log('Tick sound error:', e));
+    }, 500); // Play after tick begins
+  }
+}
+</script>
+{% endblock %}

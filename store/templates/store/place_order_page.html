@@ -1,0 +1,25 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="max-w-md mx-auto mt-10 p-6 bg-white rounded shadow">
+  <h2 class="text-xl font-semibold mb-4">Place Order - {{ product.name }}</h2>
+  <form method="POST">
+    {% csrf_token %}
+    <div class="mb-4">
+      <label class="block font-medium mb-1">Address:</label>
+      <textarea name="address" class="w-full border px-3 py-2" required></textarea>
+    </div>
+    <div class="mb-4">
+      <label class="block font-medium mb-1">Payment Method:</label>
+      <select name="payment_method" class="w-full border px-3 py-2" required>
+        <option value="Cash on Delivery">Cash on Delivery</option>
+        <option value="UPI">UPI</option>
+        <option value="Net Banking">Net Banking</option>
+        <option value="Gift Voucher">Gift Voucher</option>
+      </select>
+    </div>
+    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Place Order</button>
+  </form>
+</div>
+{% endblock %}

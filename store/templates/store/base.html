@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}Fashion Store{% endblock %}</title>
+
+  {% load static %}
+
+  <link rel="stylesheet" href="{% static 'store/css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'store/css/account.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  
+</head>
+<body class="{% block body_class %}{% endblock %}">
+
+  <!-- ✅ TOP NAVBAR -->
+  <div class="navbar">
+    <div class="navbar-left">
+      <a href="{% url 'product_list' %}">
+        <img src="{% static 'store/images/logo.png' %}" alt="logo" class="logo">
+      </a>
+    </div>
+    <div class="right-nav">
+      {% if user.is_authenticated %}
+        <a href="{% url 'account' %}"><i class="fas fa-user"></i> Account</a>
+        <a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      {% else %}
+        <a href="{% url 'login_signup' %}"><i class="fas fa-sign-in-alt"></i> Login / Signup</a>
+      {% endif %}
+    </div>
+  </div>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f9f9f9;
+      padding-top: 60px; /* space for fixed top navbar */
+      padding-bottom: 70px; /* space for bottom nav */
+    }
+
+    /* ✅ HIDE navbars on login page */
+    .login-page .navbar,
+    .login-page .bottom-nav {
+      display: none;
+    }
+
+    .login-page .page-content {
+      padding: 0;
+    }
+
+    /* ✅ TOP NAVBAR */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background-color: #3a2294;
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .navbar-left {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo {
+      height: 40px;
+      border-radius: 10px;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      margin: 0 10px;
+      font-size: 15px;
+      transition: color 0.3s;
+    }
+
+    .navbar a:hover {
+      color: #e91e63;
+    }
+
+    .right-nav {
+      display: flex;
+      align-items: center;
+    }
+
+    /* ✅ BOTTOM NAVBAR */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background-color: #ffffff;
+      border-top: 1px solid #ddd;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .bottom-nav a {
+      text-decoration: none;
+      color: #444;
+      font-size: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .bottom-nav a:hover {
+      color: #e91e63;
+    }
+
+    .page-content {
+      padding: 20px;
+    }
+  </style>
+
+  <!-- ✅ MAIN PAGE CONTENT -->
+  <div class="page-content">
+    {% block content %}{% endblock %}
+  </div>
+  
+
+  <!-- ✅ BOTTOM NAVBAR -->
+  <div class="bottom-nav">
+    <a href="{% url 'product_list' %}"><i class="fas fa-home"></i><span>Home</span></a>
+    <a href="{% url 'cart' %}"><i class="fas fa-shopping-cart"></i><span>Cart</span></a>
+    {% if user.is_authenticated %}
+      <a href="{% url 'account' %}"><i class="fas fa-user"></i><span>Account</span></a>
+    {% else %}
+      <a href="{% url 'login_signup' %}"><i class="fas fa-sign-in-alt"></i><span>Login</span></a>
+    {% endif %}
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+<script>
+  // Curtain & truck animation already triggered before this...
+
+  // 🎊 Confetti starts at 12s
+  setTimeout(() => {
+    confetti({
+      particleCount: 150,
+      spread: 70,
+      origin: { y: 0.6 }
+    });
+
+    // 🎉 Congrats message shows up
+    const congrats = document.getElementById('congrats-message');
+    congrats.style.opacity = 1;
+    congrats.style.transform = 'translateX(-50%) scale(1.1)';
+  }, 12000);
+</script>
+<script>
+function launchConfetti() {
+  const confetti = document.getElementById('confetti-canvas');
+  const ctx = confetti.getContext('2d');
+  confetti.width = window.innerWidth;
+  confetti.height = window.innerHeight;
+
+  const pieces = [];
+  const colors = ['#FFC107', '#28a745', '#007bff', '#dc3545', '#17a2b8'];
+
+  for (let i = 0; i < 150; i++) {
+    pieces.push({
+      x: Math.random() * confetti.width,
+      y: Math.random() * confetti.height - confetti.height,
+      r: Math.random() * 6 + 4,
+      d: Math.random() * 50 + 10,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      tilt: Math.floor(Math.random() * 10) - 10,
+      tiltAngleIncremental: (Math.random() * 0.1) + 0.05,
+      tiltAngle: 0
+    });
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, confetti.width, confetti.height);
+    pieces.forEach((p, i) => {
+      ctx.beginPath();
+      ctx.lineWidth = p.r;
+      ctx.strokeStyle = p.color;
+      ctx.moveTo(p.x + p.tilt + p.r / 2, p.y);
+      ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r / 2);
+      ctx.stroke();
+    });
+    update();
+  }
+
+  function update() {
+    pieces.forEach((p, i) => {
+      p.tiltAngle += p.tiltAngleIncremental;
+      p.y += (Math.cos(p.d) + 3 + p.r / 2) / 2;
+      p.x += Math.sin(p.d);
+      p.tilt = Math.sin(p.tiltAngle - (i / 3)) * 15;
+
+      if (p.y > confetti.height) {
+        p.y = -20;
+        p.x = Math.random() * confetti.width;
+      }
+    });
+  }
+
+  (function loop() {
+    draw();
+    requestAnimationFrame(loop);
+  })();
+}
+
+// 🎉 Launch confetti after 12s
+setTimeout(() => {
+  launchConfetti();
+}, 12000);
+</script>
+<script>
+  // Clear animation flag when user navigates to other pages
+  window.addEventListener("beforeunload", function () {
+    fetch("{% url 'reset_animation' %}", { method: "POST", headers: { "X-CSRFToken": "{{ csrf_token }}" } });
+  });
+</script>
+</body>
+</html>
